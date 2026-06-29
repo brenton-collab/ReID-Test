@@ -3,159 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Hardware & WebRTC Leak Lab</title>
+    <title>Advanced Inductive Identity & Target Oracle Lab</title>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; padding: 20px; background: #0b0f19; color: #e2e8f0; }
-        h1, h2 { color: #f8fafc; margin-top: 0; }
-        p { color: #94a3b8; line-height: 1.5; }
-        .card { background: #111827; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); margin-bottom: 20px; border: 1px solid #1f2937; }
-        .leak-highlight { font-size: 1.2rem; font-weight: bold; color: #f43f5e; font-family: monospace; word-break: break-all; }
-        .visitor-id { font-size: 1.2rem; font-weight: bold; color: #38bdf8; font-family: monospace; }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-top: 15px; }
-        .data-item { background: #1f2937; padding: 12px; border-radius: 6px; border: 1px solid #374151; }
-        .data-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
-        .data-value { font-size: 0.95rem; font-weight: 500; margin-top: 4px; color: #f1f5f9; }
-        .btn { margin-top: 15px; padding: 10px 15px; background: #38bdf8; border: none; border-radius: 6px; color: #0f172a; font-weight: bold; cursor: pointer; }
+        body { font-family: -apple-system, system-ui, sans-serif; padding: 20px; background: #090d16; color: #cbd5e1; }
+        h1, h2, h3 { color: #f8fafc; margin-top: 0; }
+        p { color: #94a3b8; line-height: 1.6; }
+        .card { background: #111827; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); margin-bottom: 25px; border: 1px solid #1f2937; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px; }
+        .metric-box { background: #1f2937; padding: 15px; border-radius: 8px; border-left: 4px solid #38bdf8; position: relative; }
+        .metric-box.danger { border-left-color: #ef4444; }
+        .metric-box.warning { border-left-color: #f59e0b; }
+        .label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+        .value { font-size: 1.1rem; font-weight: bold; color: #f8fafc; margin: 5px 0; font-family: monospace; word-break: break-all; }
+        .human-label { font-size: 0.85rem; color: #38bdf8; font-weight: 500; }
+        .extrapolation { background: #070a12; padding: 12px; border-radius: 6px; margin-top: 10px; font-size: 0.85rem; color: #e2e8f0; border: 1px solid #374151; }
+        .bridge { font-size: 0.8rem; color: #a78bfa; margin-top: 5px; font-style: italic; }
+        pre { background: #070a12; color: #38bdf8; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; border: 1px solid #374151; max-height: 250px;}
+        .btn-action { margin-top: 15px; padding: 10px 15px; background: #38bdf8; border: none; border-radius: 6px; color: #0f172a; font-weight: bold; cursor: pointer; transition: background 0.2s; width: 100%; }
+        .btn-action:hover { background: #7dd3fc; }
+        .btn-export { background: #22c55e; color: #ffffff; width: 100%; padding: 15px; font-size: 1.1rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 30px; }
+        .btn-export:hover { background: #16a34a; }
     </style>
 </head>
 <body>
 
-    <h1>Internal Device & Side-Channel Leak Lab</h1>
-    <p>Executing live WebRTC infrastructure discovery and side-channel audits directly on your hardware.</p>
+    <h1>Inductive Identity Resolution & Targeted Asset Oracle Lab</h1>
+    <p>Simulating defensive privacy analysis, environment tracking, and isolated state verification vectors within a local testing context.</p>
 
-    <div class="card" style="border: 1px solid #f43f5e;">
-        <h2>1. Live WebRTC Network Infrastructure Leak</h2>
-        <p>Bypassing the browser sandbox to query your OS routing table. This extracts the actual internal configurations your machine uses behind your router or local firewalls.</p>
-        <div class="data-grid">
-            <div class="data-item">
-                <div class="data-label">Leaked Internal Local IP Node</div>
-                <div id="webrtc-ip" class="leak-highlight">Gathering ICE Candidates...</div>
+    <h2>Targeted Custom Cross-Site State Oracles</h2>
+    <div class="card" style="border: 1px solid #a78bfa;">
+        <h3>Target Domain Tracking Domain: www.brentonzinck.com</h3>
+        <p>This module implements an active cross-origin asset probe loop. By querying common public structures, icons, or default page parameters, the script maps navigation state visibility constraints.</p>
+        
+        <div class="grid">
+            <div class="metric-box warning">
+                <div class="label">Image Load/Error Oracle Mapping</div>
+                <div id="oracle-img-val" class="value">Awaiting User Execution...</div>
+                <div class="human-label">Meaning: Resource Accessibility Flag</div>
+                <div id="oracle-img-extra" class="extrapolation">Verifies if the client environment successfully handles or resolves a primary graphic component from the target site footprint.</div>
             </div>
-            <div class="data-item">
-                <div class="data-label">Discovered Connection Protocol</div>
-                <div id="webrtc-proto" class="data-value">Awaiting candidate parse...</div>
+
+            <div class="metric-box">
+                <div class="label">Asynchronous Resolution Delay Oracle</div>
+                <div id="oracle-time-val" class="value">Awaiting Execution...</div>
+                <div class="human-label">Meaning: Path Latency Verification</div>
+                <div id="oracle-time-extra" class="extrapolation">Records the precision execution window to determine the delay context of cross-origin network operations.</div>
             </div>
         </div>
+        <button class="btn-action" onclick="executeTargetedOracles()">Fire Target Site Verification Loops</button>
     </div>
 
-    <div class="card">
-        <h2>2. Primary Anchor Token (Domain-Salted Hash)</h2>
-        <p><strong>Device Identifier:</strong> <span id="master-id" class="visitor-id">Generating hash...</span></p>
-    </div>
+    <h2>Active Local Infrastructure Leaks</h2>
+    <div class="grid">
+        <div class="metric-box danger">
+            <div class="label">WebRTC Infrastructure Network Audit</div>
+            <div id="web-val" class="value">Gathering local description...</div>
+            <div class="human-label">Meaning: Private LAN Topology Routing Exfiltration</div>
+            <div class="extrapolation"><strong>Inductive Deduction:</strong> Targets the device's internal physical network layout, revealing behind-the-firewall host addressing blueprints even if proxy boundaries are active.</div>
+            <div class="bridge">🗺️ <strong>GEOINT/SIGINT Integration:</strong> Correlating your host IP with wireless access point beacon arrays transforms an abstract node into a physical geographical locus.</div>
+        </div>
 
-    <div class="card">
-        <h2>3. Advanced Hardware & Structural Profile</h2>
-        <div class="data-grid">
-            <div class="data-item"><div class="data-label">Platform Claim</div><div id="hw-plat" class="data-value">Analyzing...</div></div>
-            <div class="data-item"><div class="data-label">Unmasked GPU Renderer</div><div id="adv-gpu" class="data-value">Testing GPU...</div></div>
-            <div class="data-item"><div class="data-label">CPU Cores (Logical)</div><div id="hw-cores" class="data-value">Analyzing...</div></div>
-            <div class="data-item"><div class="data-label">Screen Aspect & Orientation</div><div id="adv-screen" class="data-value">Analyzing...</div></div>
-            <div class="data-item"><div class="data-label">Browser UI Elements Height</div><div id="adv-chrome" class="data-value">Calculating...</div></div>
+        <div class="metric-box">
+            <div class="label">Public Network Interface Context</div>
+            <div id="net-type-val" class="value">Analyzing interface...</div>
+            <div class="human-label">Meaning: Physical Connection Type Tracking</div>
+            <div class="extrapolation"><strong>Inductive Deduction:</strong> Evaluates your environment connection profile context to differentiate static desktop stations from mobile nodes switching network parameters.</div>
+            <div class="bridge">📡 <strong>SIGINT Mapping Hubs:</strong> Public lookups to platforms like <code>bgp.he.net</code> reveal the Autonomous System Number (ASN), mapping your internet service provider's global fiber backbone routing route.</div>
         </div>
     </div>
 
-    <div class="card" id="defense-status">
-        <h2>4. Side-Channel Timing Resolution Auditor</h2>
-        <div class="data-grid">
-            <div class="data-item"><div class="data-label">Raw Timer Precision</div><div id="time-precision" class="data-value">Testing...</div></div>
-            <div class="data-item"><div class="data-label">Mitigation Defense Level</div><div id="time-mitigation" class="data-value">Analyzing...</div></div>
+    <h2>Hardware Matrix & Analytical Deductions</h2>
+    <div class="grid">
+        <div class="metric-box" id="hardware-inference-box">
+            <div class="label">Platform vs. Physical Ergonomics Matrix</div>
+            <div id="hw-structural-val" class="value">Analyzing hardware parameters...</div>
+            <div class="human-label">Meaning: Device Model Profile Matching</div>
+            <div id="hw-structural-extra" class="extrapolation">Stitches architecture strings alongside display screen attributes to logically infer if your hardware frame matches a convertible machine, fixed tower, or standard mobile layout.</div>
+            <div class="bridge">🛠️ <strong>OSINT Identity Graphs:</strong> Linked to commercial hardware catalogs to calculate retail market device value indexes.</div>
+        </div>
+
+        <div class="metric-box" id="timer-inference-box">
+            <div class="label">High-Resolution Browser Clock Auditor</div>
+            <div id="timer-val" class="value">Testing execution ticking...</div>
+            <div class="human-label">Meaning: Microsecond Clock Degradation Verification</div>
+            <div id="timer-extra" class="extrapolation">Measures the internal timer ticker precision step parameters to verify if tracking loop defense mitigations are currently applied.</div>
+            <div class="bridge">🔒 <strong>Defense State Strategy:</strong> Identifies if high-resolution side-channel conditions remain unmitigated on this kernel.</div>
         </div>
     </div>
+
+    <div class="card" style="margin-top:25px;">
+        <h2>Raw Structural Entropy Configuration (Fingerprint.js)</h2>
+        <pre id="raw-json">Awaiting browser fingerprint generation payload...</pre>
+    </div>
+
+    <button class="btn-export" onclick="exportLabReport()">Export Structural Lab Report Data</button>
 
     <script>
-        // --- MODULE 1: LIVE WEBRTC LOCAL INFRASTRUCTURE LEAK ---
-        function executeWebRTCLeak() {
+        const unifiedLabReport = { targetDomain: "www.brentonzinck.com", networkProfile: {}, hardwareMatrix: {}, timingAudits: {} };
+
+        // --- SECTION 1: TARGET SITE ORACLE PROBING LOGIC ---
+        async function executeTargetedOracles() {
+            const targetDomainBase = "https://www.brentonzinck.com";
+            // Standard generic fallback assets to trace connectivity boundaries safely
+            const imageProbeUrl = `${targetDomainBase}/favicon.ico?nocache=${Date.now()}`;
+            
+            document.getElementById('oracle-img-val').innerText = "Probing Target Asset...";
+            document.getElementById('oracle-time-val').innerText = "Measuring Latency Line...";
+
+            const startTime = performance.now();
+            const imgProbe = new Image();
+
+            imgProbe.onload = function() {
+                const delta = performance.now() - startTime;
+                document.getElementById('oracle-img-val').innerText = "Resource Loaded / Accessible";
+                document.getElementById('oracle-time-val').innerText = `${delta.toFixed(2)} ms`;
+                document.getElementById('oracle-img-extra').innerHTML = "<strong>Inductive Reasoning: Path Validated.</strong> The network container successfully located and loaded the resource boundary, verifying uninhibited access parameters.";
+                unifiedLabReport.oracleImageStatus = "Loaded";
+                unifiedLabReport.oracleLatencyDelta = `${delta.toFixed(2)} ms`;
+            };
+
+            imgProbe.onerror = function() {
+                const delta = performance.now() - startTime;
+                document.getElementById('oracle-img-val').innerText = "Resource Blocked / Not Found";
+                document.getElementById('oracle-time-val').innerText = `${delta.toFixed(2)} ms`;
+                document.getElementById('oracle-img-extra').innerHTML = "<strong>Inductive Reasoning: Request Boundary Fault.</strong> The target asset resource request returned a structural fault status, indicating missing file assets, network reachability blocks, or active cross-origin header isolation barriers.";
+                unifiedLabReport.oracleImageStatus = "Failed/Blocked";
+                unifiedLabReport.oracleLatencyDelta = `${delta.toFixed(2)} ms`;
+            };
+
+            imgProbe.src = imageProbeUrl;
+        }
+
+        // --- SECTION 2: WEBRTC LOCAL STRUCTURE EXFILTRATION ---
+        function initiateWebRTCScraper() {
             try {
-                // Initialize a mock peer connection with zero external server dependencies
-                const MyPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-                const pc = new MyPeerConnection({ iceServers: [] });
-                
-                // Create a generic data channel loop to force connection state mapping
+                const PeerConnectionObject = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+                if (!PeerConnectionObject) {
+                    document.getElementById('web-val').innerText = "API Interface Masked";
+                    return;
+                }
+                const pc = new PeerConnectionObject({ iceServers: [] });
                 pc.createDataChannel("");
                 pc.createOffer().then(offer => pc.setLocalDescription(offer));
-                
-                // As the browser gathers physical endpoints (ICE candidates), scrape the raw layout strings
+
                 pc.onicecandidate = function(ice) {
                     if (!ice || !ice.candidate || !ice.candidate.candidate) return;
-                    
-                    const candidateString = ice.candidate.candidate;
-                    console.log("Raw leaked candidate data: ", candidateString);
-                    
-                    // Split the line structure: 'candidate:423423 1 UDP 2122260223 192.168.X.X 54321 typ host...'
-                    const parts = candidateString.split(' ');
-                    const ipAddress = parts[4];   // The string mapping your physical IP node
-                    const protocol = parts[2];    // UDP vs TCP
-                    const type = parts[7];        // host (local network address) vs srflx (public NAT)
+                    const segments = ice.candidate.candidate.split(' ');
+                    const extractedIp = segments[4];
+                    const routeType = segments[7];
 
-                    if (type === "host") {
-                        document.getElementById('webrtc-ip').innerText = ipAddress;
-                        document.getElementById('webrtc-proto').innerText = `${protocol} Internal Link (Type: ${type})`;
+                    if (routeType === "host") {
+                        document.getElementById('web-val').innerText = `${extractedIp} (LAN Host Address)`;
+                        unifiedLabReport.networkProfile.internalLeakedIp = extractedIp;
                     }
                 };
             } catch (e) {
-                document.getElementById('webrtc-ip').innerText = "Blocked / Unsupported by Sandbox";
+                document.getElementById('web-val').innerText = "Enforced Restraint Sandbox Layer";
             }
         }
 
-        // --- MODULE 2 & 3: FINGERPRINTJS & HARDWARE PROFILING ---
+        // --- SECTION 3: SYSTEM METRICS HARVEST & CORRELATION ---
         import('https://openfpcdn.io/fingerprintjs/v5')
             .then(FingerprintJS => FingerprintJS.load())
             .then(fp => fp.get())
             .then(result => {
-                document.getElementById('master-id').innerText = result.visitorId;
-                document.getElementById('hw-cores').innerText = result.components.hardwareConcurrency.value || "Unknown";
-                document.getElementById('hw-plat').innerText = navigator.platform || "Unknown";
-                
-                // Calculate hardware metrics
-                const orientation = (screen.orientation || {}).type || window.orientation || "Unknown";
-                document.getElementById('adv-screen').innerText = `${screen.width}x${screen.height} (${orientation})`;
-                
-                const chromeHeight = window.outerHeight - window.innerHeight;
-                document.getElementById('adv-chrome').innerText = chromeHeight > 0 ? `${chromeHeight}px Browser UI` : "0px (Mobile Wrapper)";
+                document.getElementById('raw-json').innerText = JSON.stringify(result.components, null, 2);
+                unifiedLabReport.fingerprintComponentsRaw = result.components;
+                unifiedLabReport.calculatedHashId = result.visitorId;
 
-                // Unmask GPU
-                try {
-                    const canvas = document.createElement('canvas');
-                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                    if (gl) {
-                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                        document.getElementById('adv-gpu').innerText = renderer;
-                    }
-                } catch(e) { document.getElementById('adv-gpu').innerText = "Masked Context"; }
+                const platformStr = navigator.platform || "Unknown";
+                const totalLogicalCores = result.components.hardwareConcurrency.value || 1;
+                const maximumTouchPoints = navigator.maxTouchPoints || 0;
+                const widthBound = screen.width;
+                const heightBound = screen.height;
+
+                // Update structural metrics card text
+                document.getElementById('hw-structural-val').innerText = `${platformStr} | ${totalLogicalCores} Cores`;
+                const hwBox = document.getElementById('hardware-inference-box');
+                const hwExtra = document.getElementById('hardware-structural-extra');
+
+                // Apply inductive context matching logic checks
+                if (platformStr.toLowerCase().includes("win") && maximumTouchPoints > 0) {
+                    hwBox.style.borderLeftColor = "#f59e0b";
+                    hwExtra.innerHTML = `<strong>Inductive Profile Match: Touch-Enabled Windows Client Laptop.</strong> System settings disclose a desktop kernel combined with active touchscreen components (${maximumTouchPoints} points). This explicitly filters your machine signature down to high-mobility consumer ultra-books or convertible 2-in-1 workstations.`;
+                } else if (maximumTouchPoints > 0) {
+                    hwExtra.innerHTML = `<strong>Inductive Profile Match: Handheld Mobile Frame Architecture.</strong> Architecture and touch layers match structural parameters common to mobile operating system containers. Screen dimensions map onto a compact mobile aspect viewport resolution: ${widthBound}x${heightBound}.`;
+                } else {
+                    hwExtra.innerHTML = `<strong>Inductive Profile Match: Traditional Desktop Workspace Footprint.</strong> Exposes zero touch interface parameters, establishing high behavioral confidence that this device context operates from a fixed station environment using dedicated mouse/keyboard layout vectors.`;
+                }
+
+                unifiedLabReport.hardwareMatrix.calculatedPlatform = platformStr;
+                unifiedLabReport.hardwareMatrix.detectedCores = totalLogicalCores;
+                unifiedLabReport.hardwareMatrix.touchPointsCount = maximumTouchPoints;
             });
 
-        // --- MODULE 4: TIMING SIDE-CHANNEL RESOLUTION AUDITOR ---
-        function auditTimerPrecision() {
+        // Interface Type Reader
+        if (navigator.connection) {
+            const currentInterface = navigator.connection;
+            const textOut = `${currentInterface.effectiveType || 'unmapped'} (${currentInterface.type || 'mixed connection'})`;
+            document.getElementById('net-type-val').innerText = textOut;
+            unifiedLabReport.networkProfile.connectionSpeedClass = textOut;
+        } else {
+            document.getElementById('net-type-val').innerText = "API Layer Context Restricted by OS Layer";
+        }
+
+        // Time Metrics Loop Auditor
+        function executionTimerAuditor() {
             let t0 = performance.now();
             let t1 = performance.now();
-            let minDelta = Infinity;
+            let minimumObservedDelta = Infinity;
 
-            for (let i = 0; i < 30000; i++) {
+            for (let i = 0; i < 40000; i++) {
                 t1 = performance.now();
                 let delta = t1 - t0;
-                if (delta > 0 && delta < minDelta) minDelta = delta;
+                if (delta > 0 && delta < minimumObservedDelta) minimumObservedDelta = delta;
                 t0 = t1;
             }
 
-            const precisionMicroseconds = (minDelta * 1000).toFixed(2);
-            document.getElementById('time-precision').innerText = `${precisionMicroseconds} μs`;
-            
-            const mitigationEl = document.getElementById('time-mitigation');
-            const statusCard = document.getElementById('defense-status');
+            const microscale = (minimumObservedDelta * 1000).toFixed(2);
+            document.getElementById('time-val').innerText = `${microscale} μs`;
+            unifiedLabReport.timingAudits.measuredClockStep = `${microscale} us`;
 
-            if (minDelta >= 0.001) { 
-                mitigationEl.innerText = "HIGH (Timer Coarsened)";
-                statusCard.style.border = "1px solid #22c55e";
+            const timeBox = document.getElementById('timer-inference-box');
+            const timeExtra = document.getElementById('timer-extra');
+
+            if (minimumObservedDelta >= 0.001) {
+                timeExtra.innerHTML = "<strong>Inductive Defense Analysis: Active Clock Coarsening Shield Enforced.</strong> The local runtime sandbox is intentionally degrading internal precision increments to disrupt micro-timing side-channel analysis vectors.";
             } else {
-                mitigationEl.innerText = "LOW (High Precision Exposed)";
-                statusCard.style.border = "1px solid #ef4444";
+                timeBox.className = "metric-box danger";
+                timeExtra.innerHTML = "<strong>Inductive Defense Analysis: Vulnerable High-Resolution Interval Exposed.</strong> Ticking loops run uninhibited. The environment timing architecture leaves state loops exposed to meticulous execution calculations.";
             }
         }
 
-        // Initialize tests
-        executeWebRTCLeak();
-        auditTimerPrecision();
+        // --- SECTION 4: GLOBAL EXPORT MATRIX HANDLING ---
+        function exportLabReport() {
+            navigator.clipboard.writeText(JSON.stringify(unifiedLabReport, null, 2))
+                .then(() => alert("Structural Lab Intelligence Report compiled and written directly to clipboard memory storage layer."))
+                .catch(() => alert("Clipboard hardware write fault encountered. Check application configurations."));
+        }
+
+        // Bootstrapping initial sequence routines
+        initiateWebRTCScraper();
+        executionTimerAuditor();
     </script>
 </body>
 </html>
