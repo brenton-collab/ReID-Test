@@ -3,78 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fingerprint & XS-Leak Lab</title>
+    <title>Comprehensive White Hat Identity & XS-Leak Lab</title>
     <style>
-        body { font-family: -apple-system, sans-serif; padding: 20px; background: #f4f4f9; color: #333; }
-        h1, h2 { color: #111; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        #visitor-id { font-size: 1.2rem; font-weight: bold; color: #0076ff; word-break: break-all; }
-        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; max-height: 300px; }
-        .leak-status { font-weight: bold; padding: 5px 10px; border-radius: 4px; display: inline-block; }
-        .yes { background: #d4edda; color: #155724; }
-        .no { background: #f8d7da; color: #721c24; }
+        body { font-family: -apple-system, system-ui, sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }
+        h1, h2, h3 { color: #f8fafc; margin-top: 0; }
+        p { color: #94a3b8; line-size: 1.5; }
+        .card { background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-bottom: 20px; border: 1px solid #334155; }
+        .visitor-id { font-size: 1.3rem; font-weight: bold; color: #38bdf8; word-break: break-all; font-family: monospace; }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
+        .data-item { background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #475569; }
+        .data-label { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .data-value { font-size: 1rem; font-weight: 500; margin-top: 4px; color: #f1f5f9; }
+        pre { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; border: 1px solid #475569; max-height: 250px;}
+        .btn { margin-top: 15px; padding: 10px 15px; background: #38bdf8; border: none; border-radius: 6px; color: #0f172a; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn:hover { background: #7dd3fc; }
     </style>
 </head>
 <body>
 
-    <h1>Device Intelligence Lab</h1>
-    <p>Testing your phone's browser footprint and side-channel leakage.</p>
+    <h1>Device Intelligence & XS-Leak Lab</h1>
+    <p>Testing browser footprints, side-channel timing precision, and cache leakage vectors in a controlled environment.</p>
 
     <div class="card">
-        <h2>1. Fingerprint.js Result</h2>
-        <p><strong>Your Unique Visitor ID:</strong> <span id="visitor-id">Gathering entropy...</span></p>
-        <h3>Raw Component Breakdown:</h3>
-        <pre id="raw-components">Analyzing browser hardware and software features...</pre>
+        <h2>1. Primary Anchor Token (Domain-Salted Hash)</h2>
+        <p>This tracking token combines your unique hardware variables and hashes them against your specific GitHub Pages domain name.</p>
+        <p><strong>Device Identifier:</strong> <span id="master-id" class="visitor-id">Generating hash...</span></p>
     </div>
 
     <div class="card">
-        <h2>2. XS-LEAK Demo (Error Event Oracle)</h2>
-        <p>This demonstrates an Error Event side-channel. We are attempting to load a cross-origin resource. Based entirely on whether the browser fires an <code>onload</code> or <code>onerror</code> event, an attacker deduces state without reading the file.</p>
-        
-        <p>Oracle Query: <em>Is this device currently online and able to reach Google services?</em></p>
-        <p>Result: <span id="leak-result" class="leak-status">Waiting for network...</span></p>
+        <h2>2. Network Intelligence Splicing</h2>
+        <p>Simulates what a reputation engine or ad network pulls instantly from your routing node to enrich your device profile.</p>
+        <div class="data-grid">
+            <div class="data-item"><div class="data-label">Public IP Node</div><div id="net-ip" class="data-value">Loading...</div></div>
+            <div class="data-item"><div class="data-label">Geographic Node</div><div id="net-geo" class="data-value">Loading...</div></div>
+            <div class="data-item"><div class="data-label">ISP / Autonomous System</div><div id="net-isp" class="data-value">Loading...</div></div>
+            <div class="data-item"><div class="data-label">Local Connection Type</div><div id="net-type" class="data-value">Loading...</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. Advanced Hardware & Structural Profile</h2>
+        <p>Pushes beyond simple text attributes to test hardware sensor states and calculate layout boundaries.</p>
+        <div class="data-grid">
+            <div class="data-item"><div class="data-label">Platform Claim</div><div id="hw-plat" class="data-value">Analyzing...</div></div>
+            <div class="data-item"><div class="data-label">Unmasked GPU Renderer</div><div id="adv-gpu" class="data-value">Testing GPU...</div></div>
+            <div class="data-item"><div class="data-label">CPU Cores (Logical)</div><div id="hw-cores" class="data-value">Analyzing...</div></div>
+            <div class="data-item"><div class="data-label">Touch Capabilities</div><div id="hw-touch" class="data-value">Analyzing...</div></div>
+            <div class="data-item"><div class="data-label">Screen Aspect & Orientation</div><div id="adv-screen" class="data-value">Analyzing...</div></div>
+            <div class="data-item"><div class="data-label">Browser UI Elements Height</div><div id="adv-chrome" class="data-value">Calculating...</div></div>
+            <div class="data-item"><div class="data-label">Device Motion Sensors</div><div id="adv-motion" class="data-value">Reading...</div></div>
+            <div class="data-item"><div class="data-label">Power Level Status</div><div id="hw-battery" class="data-value">Analyzing...</div></div>
+        </div>
+    </div>
+
+    <div class="card" id="defense-status">
+        <h2>4. Side-Channel Timing Resolution Auditor</h2>
+        <p>Checks how precisely your browser lets JavaScript track time. Attacks like XS-Search require high precision. Modern browsers fight this by "coarsening" the clock.</p>
+        <div class="data-grid">
+            <div class="data-item"><div class="data-label">Raw Timer Precision</div><div id="time-precision" class="data-value">Testing...</div></div>
+            <div class="data-item"><div class="data-label">Mitigation Defense Level</div><div id="time-mitigation" class="data-value">Analyzing...</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>5. XS-Leak: Cache Timing Probe Experiment</h2>
+        <p>Tests your phone's memory/disk cache. If a resource takes &lt;10ms, it's cached locally (indicating you've likely visited sites using those platforms). Over 30ms means a fresh network download.</p>
+        <div class="data-grid">
+            <div class="data-item">
+                <div class="data-label">Asset 1: Tailwind CSS CDN</div>
+                <div id="cache-asset-1" class="data-value">Awaiting execution...</div>
+            </div>
+            <div class="data-item">
+                <div class="data-label">Asset 2: jQuery CDN Core</div>
+                <div id="cache-asset-2" class="data-value">Awaiting execution...</div>
+            </div>
+        </div>
+        <button class="btn" onclick="runCacheProbe()">Execute Cache Scan</button>
+    </div>
+
+    <div class="card">
+        <h2>6. Raw Browser Entropy Object (Fingerprint.js)</h2>
+        <pre id="raw-json">Awaiting browser fingerprint generation payload...</pre>
     </div>
 
     <script>
-        // --- 1. FingerprintJS Implementation ---
-        const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
-            .then(FingerprintJS => FingerprintJS.load());
-
-        fpPromise
+        // --- MODULE 1 & 3: FINGERPRINTJS & BASIC HARDWARE ---
+        import('https://openfpcdn.io/fingerprintjs/v5')
+            .then(FingerprintJS => FingerprintJS.load())
             .then(fp => fp.get())
             .then(result => {
-                // Display the master tracking hash
-                document.getElementById('visitor-id').innerText = result.visitorId;
+                document.getElementById('master-id').innerText = result.visitorId;
+                document.getElementById('raw-json').innerText = JSON.stringify(result.components, null, 2);
                 
-                // Display the individual raw entropy signals used to build the hash
-                document.getElementById('raw-components').innerText = JSON.stringify(result.components, null, 2);
-            })
-            .catch(err => {
-                document.getElementById('raw-components').innerText = "Failed to load FingerprintJS: " + err;
+                document.getElementById('hw-cores').innerText = result.components.hardwareConcurrency.value || "Unknown";
+                document.getElementById('hw-plat').innerText = navigator.platform || "Unknown";
+                document.getElementById('hw-touch').innerText = `Max Touch Points: ${navigator.maxTouchPoints || 0}`;
+                
+                // Run additional hardware/layout checks once fingerprint loads
+                runAdvancedProfile();
             });
 
-        // --- 2. XS-LEAK (Error Event Side-Channel) Implementation ---
-        // We use a known cross-origin asset. If it loads, 'onload' fires. If blocked or missing, 'onerror' fires.
-        function testXSLeak() {
-            const targetImg = document.createElement('img');
-            const resultEl = document.getElementById('leak-result');
-            
-            // Appending a cache-buster timestamp so the browser is forced to make a live network request
-            targetImg.src = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png?cb=" + Date.now();
-            
-            targetImg.onload = function() {
-                resultEl.innerText = "YES (Loaded Successfully)";
-                resultEl.className = "leak-status yes";
-            };
-            
-            targetImg.onerror = function() {
-                resultEl.innerText = "NO (Failed to Load / Blocked)";
-                resultEl.className = "leak-status no";
-            };
+        // --- MODULE 2: NETWORK INTELLIGENCE SPLICING ---
+        fetch('https://ip-api.com/json/')
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    document.getElementById('net-ip').innerText = data.query;
+                    document.getElementById('net-geo').innerText = `${data.city}, ${data.regionName}, ${data.countryCode}`;
+                    document.getElementById('net-isp').innerText = `${data.isp} (${data.as})`;
+                } else {
+                    document.getElementById('net-ip').innerText = "Request Blocked";
+                }
+            })
+            .catch(() => {
+                document.getElementById('net-ip').innerText = "API Error / Ad-Block Active";
+            });
+
+        if (navigator.connection) {
+            const conn = navigator.connection;
+            document.getElementById('net-type').innerText = `${conn.effectiveType || 'unknown'} (${conn.type || 'mixed'})`;
+        } else {
+            document.getElementById('net-type').innerText = "Restricted by Browser Sandbox";
         }
-        
-        // Run the leak test after page load
-        window.onload = testXSLeak;
+
+        if (navigator.getBattery) {
+            navigator.getBattery().then(battery => {
+                function updateBatteryUI() {
+                    document.getElementById('hw-battery').innerText = `${Math.round(battery.level * 100)}% (${battery.charging ? 'Charging' : 'Discharging'})`;
+                }
+                updateBatteryUI();
+                battery.addEventListener('levelchange', updateBatteryUI);
+                battery.addEventListener('chargingchange', updateBatteryUI);
+            });
+        } else {
+            document.getElementById('hw-battery').innerText = "Restricted (Safari/iOS Sandbox)";
+        }
+
+        // --- MODULE 3 CONTINUED: ADVANCED HARDWARE PROFILING ---
+        function runAdvancedProfile() {
+            // Unmask WebGL Graphic Driver Strings
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                        document.getElementById('adv-gpu').innerText = renderer;
+                    } else {
+                        document.getElementById('adv-gpu').innerText = "Masked Generic Driver";
+                    }
+                }
+            } catch(e) {
+                document.getElementById('adv-gpu').innerText = "WebGL Blocked";
+            }
+
+            // Screen Orientation Layouts
+            const orientation = (screen.orientation || {}).type || window.orientation || "Unknown";
+            document.getElementById('adv-screen').innerText = `${screen.width}x${screen.height} (${orientation})`;
+
+            // Calculate Browser Chrome Element Boundaries
+            const chromeHeight = window.outerHeight - window.innerHeight;
+            document.getElementById('adv-chrome').innerText = chromeHeight > 0 ? `${chromeHeight}px Browser UI` : "0px (Mobile Layer / Fullscreen)";
+
+            // Check Motion Sensors
+            if (window.DeviceMotionEvent) {
+                document.getElementById('adv-motion').innerText = "Hardware Listening...";
+                window.addEventListener('devicemotion', (event) => {
+                    if(event.acceleration && event.acceleration.x !== null) {
+                        document.getElementById('adv-motion').innerText = `Active (X Axis: ${event.acceleration.x.toFixed(2)})`;
+                    }
+                }, { once: true });
+            } else {
+                document.getElementById('adv-motion').innerText = "Blocked/Unsupported by OS";
+            }
+        }
+
+        // --- MODULE 4: TIMING SIDE-CHANNEL RESOLUTION AUDITOR ---
+        function auditTimerPrecision() {
+            let t0 = performance.now();
+            let t1 = performance.now();
+            let minDelta = Infinity;
+
+            for (let i = 0; i < 50000; i++) {
+                t1 = performance.now();
+                let delta = t1 - t0;
+                if (delta > 0 && delta < minDelta) {
+                    minDelta = delta;
+                }
+                t0 = t1;
+            }
+
+            const precisionMicroseconds = (minDelta * 1000).toFixed(2);
+            document.getElementById('time-precision').innerText = `${precisionMicroseconds} μs`;
+
+            const mitigationEl = document.getElementById('time-mitigation');
+            const statusCard = document.getElementById('defense-status');
+
+            if (minDelta >= 0.001) { 
+                mitigationEl.innerText = "HIGH (Timer Coarsened)";
+                statusCard.style.border = "1px solid #22c55e";
+            } else {
+                mitigationEl.innerText = "LOW (High Precision Exposed)";
+                statusCard.style.border = "1px solid #ef4444";
+            }
+        }
+
+        // --- MODULE 5: XS-LEAK CACHE PROBE IMPLEMENTATION ---
+        async function probeUrlTiming(url) {
+            const start = performance.now();
+            try {
+                await fetch(url, { mode: 'no-cors', cache: 'force-cache' });
+            } catch (e) {}
+            const end = performance.now();
+            return end - start;
+        }
+
+        async function runCacheProbe() {
+            const asset1Url = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
+            const asset2Url = "https://code.jquery.com/jquery-3.7.1.min.js";
+
+            document.getElementById('cache-asset-1').innerText = "Probing...";
+            document.getElementById('cache-asset-2').innerText = "Probing...";
+
+            const time1 = await probeUrlTiming(asset1Url);
+            const time2 = await probeUrlTiming(asset2Url);
+
+            // A threshold of less than 10ms generally flags a high-confidence cache hit
+            document.getElementById('cache-asset-1').innerText = `${time1.toFixed(2)} ms (${time1 < 10 ? 'CACHED (Visited Site Using It)' : 'UNCACHED (Fresh Network Load)'})`;
+            document.getElementById('cache-asset-2').innerText = `${time2.toFixed(2)} ms (${time2 < 10 ? 'CACHED (Visited Site Using It)' : 'UNCACHED (Fresh Network Load)'})`;
+        }
+
+        // Initialize execution on page entry
+        auditTimerPrecision();
     </script>
 </body>
 </html>
