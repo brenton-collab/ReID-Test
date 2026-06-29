@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint & XS-Leak Lab</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; padding: 20px; background: #f4f4f9; color: #333; }
+        h1, h2 { color: #111; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        #visitor-id { font-size: 1.2rem; font-weight: bold; color: #0076ff; word-break: break-all; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; max-height: 300px; }
+        .leak-status { font-weight: bold; padding: 5px 10px; border-radius: 4px; display: inline-block; }
+        .yes { background: #d4edda; color: #155724; }
+        .no { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <h1>Device Intelligence Lab</h1>
+    <p>Testing your phone's browser footprint and side-channel leakage.</p>
+
+    <div class="card">
+        <h2>1. Fingerprint.js Result</h2>
+        <p><strong>Your Unique Visitor ID:</strong> <span id="visitor-id">Gathering entropy...</span></p>
+        <h3>Raw Component Breakdown:</h3>
+        <pre id="raw-components">Analyzing browser hardware and software features...</pre>
+    </div>
+
+    <div class="card">
+        <h2>2. XS-LEAK Demo (Error Event Oracle)</h2>
+        <p>This demonstrates an Error Event side-channel. We are attempting to load a cross-origin resource. Based entirely on whether the browser fires an <code>onload</code> or <code>onerror</code> event, an attacker deduces state without reading the file.</p>
+        
+        <p>Oracle Query: <em>Is this device currently online and able to reach Google services?</em></p>
+        <p>Result: <span id="leak-result" class="leak-status">Waiting for network...</span></p>
+    </div>
+
+    <script>
+        // --- 1. FingerprintJS Implementation ---
+        const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
+            .then(FingerprintJS => FingerprintJS.load());
+
+        fpPromise
+            .then(fp => fp.get())
+            .then(result => {
+                // Display the master tracking hash
+                document.getElementById('visitor-id').innerText = result.visitorId;
+                
+                // Display the individual raw entropy signals used to build the hash
+                document.getElementById('raw-components').innerText = JSON.stringify(result.components, null, 2);
+            })
+            .catch(err => {
+                document.getElementById('raw-components').innerText = "Failed to load FingerprintJS: " + err;
+            });
+
+        // --- 2. XS-LEAK (Error Event Side-Channel) Implementation ---
+        // We use a known cross-origin asset. If it loads, 'onload' fires. If blocked or missing, 'onerror' fires.
+        function testXSLeak() {
+            const targetImg = document.createElement('img');
+            const resultEl = document.getElementById('leak-result');
+            
+            // Appending a cache-buster timestamp so the browser is forced to make a live network request
+            targetImg.src = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png?cb=" + Date.now();
+            
+            targetImg.onload = function() {
+                resultEl.innerText = "YES (Loaded Successfully)";
+                resultEl.className = "leak-status yes";
+            };
+            
+            targetImg.onerror = function() {
+                resultEl.innerText = "NO (Failed to Load / Blocked)";
+                resultEl.className = "leak-status no";
+            };
+        }
+        
+        // Run the leak test after page load
+        window.onload = testXSLeak;
+    </script>
+</body>
+</html>
