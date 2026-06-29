@@ -7,7 +7,7 @@
     <style>
         body { font-family: -apple-system, system-ui, sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }
         h1, h2, h3 { color: #f8fafc; margin-top: 0; }
-        p { color: #94a3b8; line-size: 1.5; }
+        p { color: #94a3b8; line-height: 1.5; }
         .card { background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-bottom: 20px; border: 1px solid #334155; }
         .visitor-id { font-size: 1.3rem; font-weight: bold; color: #38bdf8; word-break: break-all; font-family: monospace; }
         .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
@@ -17,6 +17,8 @@
         pre { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; border: 1px solid #475569; max-height: 250px;}
         .btn { margin-top: 15px; padding: 10px 15px; background: #38bdf8; border: none; border-radius: 6px; color: #0f172a; font-weight: bold; cursor: pointer; transition: background 0.2s; }
         .btn:hover { background: #7dd3fc; }
+        .btn-export { background: #22c55e; color: #ffffff; width: 100%; padding: 15px; font-size: 1.1rem; margin-top: 10px; margin-bottom: 30px; }
+        .btn-export:hover { background: #4ade80; }
     </style>
 </head>
 <body>
@@ -86,7 +88,18 @@
         <pre id="raw-json">Awaiting browser fingerprint generation payload...</pre>
     </div>
 
+    <button class="btn btn-export" onclick="exportLabData()">Export Profile Data (Copy to Clipboard)</button>
+
     <script>
+        // Global object memory to store parsed data points for export
+        const labMetrics = {
+            visitorId: "Pending",
+            network: {},
+            hardware: {},
+            securityAudits: {},
+            rawFingerprintComponents: {}
+        };
+
         // --- MODULE 1 & 3: FINGERPRINTJS & BASIC HARDWARE ---
         import('https://openfpcdn.io/fingerprintjs/v5')
             .then(FingerprintJS => FingerprintJS.load())
@@ -95,11 +108,17 @@
                 document.getElementById('master-id').innerText = result.visitorId;
                 document.getElementById('raw-json').innerText = JSON.stringify(result.components, null, 2);
                 
+                labMetrics.visitorId = result.visitorId;
+                labMetrics.rawFingerprintComponents = result.components;
+
                 document.getElementById('hw-cores').innerText = result.components.hardwareConcurrency.value || "Unknown";
                 document.getElementById('hw-plat').innerText = navigator.platform || "Unknown";
                 document.getElementById('hw-touch').innerText = `Max Touch Points: ${navigator.maxTouchPoints || 0}`;
                 
-                // Run additional hardware/layout checks once fingerprint loads
+                labMetrics.hardware.platform = navigator.platform;
+                labMetrics.hardware.logicalCores = result.components.hardwareConcurrency.value;
+                labMetrics.hardware.maxTouchPoints = navigator.maxTouchPoints;
+
                 runAdvancedProfile();
             });
 
@@ -111,6 +130,11 @@
                     document.getElementById('net-ip').innerText = data.query;
                     document.getElementById('net-geo').innerText = `${data.city}, ${data.regionName}, ${data.countryCode}`;
                     document.getElementById('net-isp').innerText = `${data.isp} (${data.as})`;
+                    
+                    labMetrics.network.ip = data.query;
+                    labMetrics.network.geo = `${data.city}, ${data.regionName}, ${data.countryCode}`;
+                    labMetrics.network.isp = data.isp;
+                    labMetrics.network.asn = data.as;
                 } else {
                     document.getElementById('net-ip').innerText = "Request Blocked";
                 }
@@ -121,15 +145,20 @@
 
         if (navigator.connection) {
             const conn = navigator.connection;
-            document.getElementById('net-type').innerText = `${conn.effectiveType || 'unknown'} (${conn.type || 'mixed'})`;
+            const connText = `${conn.effectiveType || 'unknown'} (${conn.type || 'mixed'})`;
+            document.getElementById('net-type').innerText = connText;
+            labMetrics.network.connectionType = connText;
         } else {
             document.getElementById('net-type').innerText = "Restricted by Browser Sandbox";
+            labMetrics.network.connectionType = "Not Supported";
         }
 
         if (navigator.getBattery) {
             navigator.getBattery().then(battery => {
                 function updateBatteryUI() {
-                    document.getElementById('hw-battery').innerText = `${Math.round(battery.level * 100)}% (${battery.charging ? 'Charging' : 'Discharging'})`;
+                    const batteryText = `${Math.round(battery.level * 100)}% (${battery.charging ? 'Charging' : 'Discharging'})`;
+                    document.getElementById('hw-battery').innerText = batteryText;
+                    labMetrics.hardware.batteryState = batteryText;
                 }
                 updateBatteryUI();
                 battery.addEventListener('levelchange', updateBatteryUI);
@@ -137,11 +166,11 @@
             });
         } else {
             document.getElementById('hw-battery').innerText = "Restricted (Safari/iOS Sandbox)";
+            labMetrics.hardware.batteryState = "Restricted Sandbox";
         }
 
         // --- MODULE 3 CONTINUED: ADVANCED HARDWARE PROFILING ---
         function runAdvancedProfile() {
-            // Unmask WebGL Graphic Driver Strings
             try {
                 const canvas = document.createElement('canvas');
                 const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -150,25 +179,28 @@
                     if (debugInfo) {
                         const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
                         document.getElementById('adv-gpu').innerText = renderer;
+                        labMetrics.hardware.unmaskedGpu = renderer;
                     } else {
                         document.getElementById('adv-gpu').innerText = "Masked Generic Driver";
+                        labMetrics.hardware.unmaskedGpu = "Masked";
                     }
                 }
             } catch(e) {
                 document.getElementById('adv-gpu').innerText = "WebGL Blocked";
             }
 
-            // Screen Orientation Layouts
             const orientation = (screen.orientation || {}).type || window.orientation || "Unknown";
             document.getElementById('adv-screen').innerText = `${screen.width}x${screen.height} (${orientation})`;
+            labMetrics.hardware.screenResolution = `${screen.width}x${screen.height}`;
+            labMetrics.hardware.screenOrientation = orientation;
 
-            // Calculate Browser Chrome Element Boundaries
             const chromeHeight = window.outerHeight - window.innerHeight;
             document.getElementById('adv-chrome').innerText = chromeHeight > 0 ? `${chromeHeight}px Browser UI` : "0px (Mobile Layer / Fullscreen)";
+            labMetrics.hardware.browserChromeHeight = chromeHeight;
 
-            // Check Motion Sensors
             if (window.DeviceMotionEvent) {
                 document.getElementById('adv-motion').innerText = "Hardware Listening...";
+                labMetrics.hardware.motionSensors = "Supported";
                 window.addEventListener('devicemotion', (event) => {
                     if(event.acceleration && event.acceleration.x !== null) {
                         document.getElementById('adv-motion').innerText = `Active (X Axis: ${event.acceleration.x.toFixed(2)})`;
@@ -176,6 +208,7 @@
                 }, { once: true });
             } else {
                 document.getElementById('adv-motion').innerText = "Blocked/Unsupported by OS";
+                labMetrics.hardware.motionSensors = "Blocked/Unsupported";
             }
         }
 
@@ -200,12 +233,16 @@
             const mitigationEl = document.getElementById('time-mitigation');
             const statusCard = document.getElementById('defense-status');
 
+            labMetrics.securityAudits.timerPrecisionRaw = `${precisionMicroseconds} us`;
+
             if (minDelta >= 0.001) { 
                 mitigationEl.innerText = "HIGH (Timer Coarsened)";
                 statusCard.style.border = "1px solid #22c55e";
+                labMetrics.securityAudits.timerMitigationPosture = "High (Coarsened)";
             } else {
                 mitigationEl.innerText = "LOW (High Precision Exposed)";
                 statusCard.style.border = "1px solid #ef4444";
+                labMetrics.securityAudits.timerMitigationPosture = "Low (Vulnerable)";
             }
         }
 
@@ -229,12 +266,36 @@
             const time1 = await probeUrlTiming(asset1Url);
             const time2 = await probeUrlTiming(asset2Url);
 
-            // A threshold of less than 10ms generally flags a high-confidence cache hit
-            document.getElementById('cache-asset-1').innerText = `${time1.toFixed(2)} ms (${time1 < 10 ? 'CACHED (Visited Site Using It)' : 'UNCACHED (Fresh Network Load)'})`;
-            document.getElementById('cache-asset-2').innerText = `${time2.toFixed(2)} ms (${time2 < 10 ? 'CACHED (Visited Site Using It)' : 'UNCACHED (Fresh Network Load)'})`;
+            const stat1 = `${time1.toFixed(2)} ms (${time1 < 10 ? 'CACHED' : 'UNCACHED'})`;
+            const stat2 = `${time2.toFixed(2)} ms (${time2 < 10 ? 'CACHED' : 'UNCACHED'})`;
+
+            document.getElementById('cache-asset-1').innerText = stat1;
+            document.getElementById('cache-asset-2').innerText = stat2;
+
+            labMetrics.securityAudits.cacheProbeTailwindDelta = stat1;
+            labMetrics.securityAudits.cacheProbeJqueryDelta = stat2;
         }
 
-        // Initialize execution on page entry
+        // --- EXPORT DATA UTILITY ---
+        function exportLabData() {
+            // Append current state context to the export string
+            labMetrics.exportTimestamp = new Date().toISOString();
+            labMetrics.userAgentRaw = navigator.userAgent;
+
+            const jsonOutput = JSON.stringify(labMetrics, null, 2);
+
+            // Modern clipboard API write
+            navigator.clipboard.writeText(jsonOutput)
+                .then(() => {
+                    alert("Success! Comprehensive profile metrics copied to your clipboard. You can now paste the results raw directly into our conversation.");
+                })
+                .catch(err => {
+                    alert("Clipboard export failed. Manually copy the data payload or inspect console log instead. Error: " + err);
+                    console.log(jsonOutput);
+                });
+        }
+
+        // Initialize clock parameters on page load
         auditTimerPrecision();
     </script>
 </body>
