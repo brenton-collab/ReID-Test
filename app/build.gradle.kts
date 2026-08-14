@@ -5,15 +5,13 @@ plugins {
 android {
     namespace = "ca.brentzinck.fintracid"
     compileSdk = 35
-
     defaultConfig {
         applicationId = "ca.brentzinck.relaycapture"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 10
+        versionName = "1.0.0"
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
