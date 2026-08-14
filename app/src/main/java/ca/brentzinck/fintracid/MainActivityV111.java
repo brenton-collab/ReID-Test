@@ -2,6 +2,7 @@ package ca.brentzinck.fintracid;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.webkit.MimeTypeMap;
 
 import androidx.documentfile.provider.DocumentFile;
 
@@ -17,19 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Relay Capture v1.1.1 transaction patch.
- *
- * Cloud-backed SAF providers such as Google Drive can report stale file-size
- * metadata immediately after a successful write. v1.1.0 treated that lag as a
- * failed destination and aborted before writing the provenance sidecar.
- *
- * This activity preserves the proven MainActivity capture/profile/destination
- * implementation and overrides only the destination save transaction. A write
- * is verified by reopening and reading the created URI, with short retries.
- * Partial destination artifacts are deleted on transaction failure where the
- * provider permits it.
- */
+/** Cloud-safe Drive transaction layer used by Relay Capture. */
 public class MainActivityV111 extends MainActivity {
 
     @Override
@@ -38,9 +27,7 @@ public class MainActivityV111 extends MainActivity {
               String mat, String nt, long secured, List<MainActivity.Destination> chosen) throws Exception {
 
         ContentResolver resolver = getContentResolver();
-        String mime = it.file != null
-                ? (it.file.getName().endsWith(".png") ? "image/png" : "image/jpeg")
-                : resolver.getType(it.uri);
+        String mime = it.file != null ? localMime(it.file.getName()) : resolver.getType(it.uri);
         if (mime == null) mime = "application/octet-stream";
 
         String ex = ext(it.name, mime);
@@ -82,7 +69,7 @@ public class MainActivityV111 extends MainActivity {
             meta.put("matter", mat);
             meta.put("note", nt);
             meta.put("original_name", it.name);
-            meta.put("app_version", "1.1.1");
+            meta.put("app_version", "1.3.0");
             meta.put("mime_type", mime);
             meta.put("file_name", fileName);
             meta.put("bytes_written", bytesWritten);
@@ -109,33 +96,37 @@ public class MainActivityV111 extends MainActivity {
             if (!verifyReadable(sidecar.getUri())) throw new Exception("provenance verification failed");
 
         } catch (Exception failure) {
-            // Best-effort rollback keeps retries from accumulating known partial copies.
             try { if (sidecar != null) sidecar.delete(); } catch (Exception ignored) {}
             try { target.delete(); } catch (Exception ignored) {}
             throw failure;
         }
     }
 
-    /**
-     * Verify persistence through the provider's actual content stream rather
-     * than immediately-consistent metadata such as DocumentFile.length().
-     */
+    String localMime(String name) {
+        String lower = name == null ? "" : name.toLowerCase(Locale.CANADA);
+        if (lower.endsWith(".png")) return "image/png";
+        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+        if (lower.endsWith(".txt")) return "text/plain";
+        if (lower.endsWith(".json")) return "application/json";
+        if (lower.endsWith(".pdf")) return "application/pdf";
+        int dot = lower.lastIndexOf('.');
+        if (dot >= 0 && dot < lower.length()-1) {
+            String guess = MimeTypeMap.getSingleton().getMimeTypeFromExtension(lower.substring(dot+1));
+            if (guess != null) return guess;
+        }
+        return "application/octet-stream";
+    }
+
     private boolean verifyReadable(Uri uri) {
         final long[] delaysMs = {0, 150, 350, 750, 1200};
         for (long delay : delaysMs) {
             if (delay > 0) {
                 try { Thread.sleep(delay); }
-                catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return false;
-                }
+                catch (InterruptedException e) { Thread.currentThread().interrupt(); return false; }
             }
             try (InputStream in = getContentResolver().openInputStream(uri)) {
                 if (in != null && in.read() != -1) return true;
-            } catch (Exception ignored) {
-                // Cloud-backed providers can transiently reject a read while
-                // committing the just-closed write. Retry within a short bound.
-            }
+            } catch (Exception ignored) {}
         }
         return false;
     }
