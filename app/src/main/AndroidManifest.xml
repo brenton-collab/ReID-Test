@@ -9,7 +9,7 @@
         <service android:name=".ProjectionService" android:exported="false" android:foregroundServiceType="mediaProjection" />
         <activity android:name=".ScreenshotActivity" android:exported="false" android:label="Relay Screenshot" />
         <activity android:name=".CaptureActivity" android:exported="false" android:label="Relay Capture Camera" />
-        <activity android:name=".MainActivityV141" android:exported="true" android:launchMode="singleTop" android:label="Relay Capture">
+        <activity android:name=".MainActivityV142" android:exported="true" android:launchMode="singleTop" android:label="Relay Capture">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
