@@ -16,8 +16,8 @@ android {
         applicationId = "ca.brentzinck.relaycapture"
         minSdk = 26
         targetSdk = 35
-        versionCode = 33
-        versionName = "1.2.3"
+        versionCode = 34
+        versionName = "1.2.4"
     }
 
     if (hasReleaseSigning) {
