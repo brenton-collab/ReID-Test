@@ -60,6 +60,13 @@ public class CaptureActivity extends ComponentActivity {
         GuideOverlay overlay=new GuideOverlay(this,guide,perspective);
         root.addView(overlay,new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 
+        TextView cancel=new TextView(this);
+        cancel.setText("×  Cancel"); cancel.setTextSize(16); cancel.setTextColor(Color.WHITE); cancel.setGravity(Gravity.CENTER);
+        cancel.setPadding(dp(14),dp(8),dp(14),dp(8)); cancel.setBackgroundColor(0x99000000); cancel.setContentDescription("Cancel capture");
+        cancel.setOnClickListener(v->cancelCapture());
+        FrameLayout.LayoutParams xp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,dp(48),Gravity.TOP|Gravity.START);xp.leftMargin=dp(14);xp.topMargin=dp(14);root.addView(cancel,xp);
+        cancel.setOnApplyWindowInsetsListener((v,insets)->{FrameLayout.LayoutParams p=(FrameLayout.LayoutParams)v.getLayoutParams();p.topMargin=dp(14)+insets.getSystemWindowInsetTop();v.setLayoutParams(p);return insets;});cancel.requestApplyInsets();
+
         LinearLayout controls=new LinearLayout(this);controls.setOrientation(LinearLayout.VERTICAL);controls.setGravity(Gravity.CENTER_HORIZONTAL);controls.setPadding(dp(20),dp(12),dp(20),dp(28));controls.setBackgroundColor(0x99000000);
         TextView hint=new TextView(this);String instruction=getIntent().getStringExtra(EXTRA_INSTRUCTION);hint.setText(instruction==null||instruction.trim().isEmpty()?"Capture clearly. Keep the full subject visible.":instruction);hint.setTextColor(Color.WHITE);hint.setTextSize(15);hint.setGravity(Gravity.CENTER);controls.addView(hint);
         if(!"none".equals(guide)){TextView guideHint=new TextView(this);guideHint.setText("Fit the subject inside the guide. The overlay is not saved into the image.");guideHint.setTextColor(0xffd8dde5);guideHint.setTextSize(12);guideHint.setGravity(Gravity.CENTER);LinearLayout.LayoutParams gp=new LinearLayout.LayoutParams(-1,-2);gp.topMargin=dp(5);controls.addView(guideHint,gp);}
@@ -67,6 +74,9 @@ public class CaptureActivity extends ComponentActivity {
         FrameLayout.LayoutParams cp=new FrameLayout.LayoutParams(-1,-2,Gravity.BOTTOM);root.addView(controls,cp);
         setContentView(root);
     }
+
+    void cancelCapture(){setResult(RESULT_CANCELED);finish();}
+    @Override public void onBackPressed(){cancelCapture();}
 
     private void startCamera(){ListenableFuture<ProcessCameraProvider> future=ProcessCameraProvider.getInstance(this);future.addListener(()->{try{ProcessCameraProvider provider=future.get();Preview preview=new Preview.Builder().build();preview.setSurfaceProvider(previewView.getSurfaceProvider());imageCapture=new ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build();provider.unbindAll();provider.bindToLifecycle(this,CameraSelector.DEFAULT_BACK_CAMERA,preview,imageCapture);}catch(Exception e){Toast.makeText(this,"Camera unavailable: "+e.getMessage(),Toast.LENGTH_LONG).show();finish();}},ContextCompat.getMainExecutor(this));}
 
