@@ -12,23 +12,24 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-/**
- * Relay Capture v1.3 Universal Intake.
- *
- * The validated workflow/preservation core remains inherited. This layer:
- *  - respects Android status-bar insets on main/product surfaces,
- *  - accepts common documents, text, URLs, and multi-item Android shares,
- *  - broadens Import through the Storage Access Framework,
- *  - stages shared text/URLs as ordinary local artifacts,
- *  - surfaces source provenance in the capture UX.
- */
+/** Relay Capture v1.3 Universal Intake. */
 public class MainActivityV13 extends MainActivityV124 {
     TextView incomingSummary;
     boolean receivedExternalShare = false;
 
     @Override public void onCreate(Bundle b) {
         super.onCreate(b);
-        if (receivedExternalShare) {
+        if (receivedExternalShare) { showStage(0); updateWorkflowUi(); }
+    }
+
+    @Override protected void onNewIntent(Intent in) {
+        int before = items.size();
+        super.onNewIntent(in);
+        if (items.size() > before) {
+            WorkflowProfile p = currentWorkflowProfile();
+            String fallback = p.steps.isEmpty() ? "Capture" : p.steps.get(0).label;
+            for (int i = before; i < items.size(); i++) itemSteps.put(items.get(i), fallback);
+            receivedExternalShare = true;
             showStage(0);
             updateWorkflowUi();
         }
@@ -44,13 +45,9 @@ public class MainActivityV13 extends MainActivityV124 {
         ScrollView sc = (ScrollView) screen;
         if (sc.getChildCount() == 0) return;
         View child = sc.getChildAt(0);
-        int left = child.getPaddingLeft();
-        int baseTop = child.getPaddingTop();
-        int right = child.getPaddingRight();
-        int bottom = child.getPaddingBottom();
+        int left = child.getPaddingLeft(), baseTop = child.getPaddingTop(), right = child.getPaddingRight(), bottom = child.getPaddingBottom();
         child.setOnApplyWindowInsetsListener((v, insets) -> {
-            int top = insets.getSystemWindowInsetTop();
-            v.setPadding(left, baseTop + top, right, bottom);
+            v.setPadding(left, baseTop + insets.getSystemWindowInsetTop(), right, bottom);
             return insets;
         });
         child.requestApplyInsets();
@@ -58,9 +55,6 @@ public class MainActivityV13 extends MainActivityV124 {
 
     @Override LinearLayout productRoot(String title, String subtitle) {
         LinearLayout body = super.productRoot(title, subtitle);
-        View screen = body;
-        while (screen.getParent() instanceof View) screen = (View) screen.getParent();
-        // setContentView has already installed the ScrollView; find its root through the window.
         View content = getWindow().getDecorView().findViewById(android.R.id.content);
         if (content instanceof ViewGroup && ((ViewGroup) content).getChildCount() > 0)
             applyTopInset(((ViewGroup) content).getChildAt(0));
@@ -82,10 +76,8 @@ public class MainActivityV13 extends MainActivityV124 {
         if (in == null) return;
         String action = in.getAction();
         if (!Intent.ACTION_SEND.equals(action) && !Intent.ACTION_SEND_MULTIPLE.equals(action)) return;
-
         int before = items.size();
         for (Uri u : uris(in)) items.add(Item.uri(u, getName(u), "shared"));
-
         if (Intent.ACTION_SEND.equals(action)) {
             CharSequence sharedText = in.getCharSequenceExtra(Intent.EXTRA_TEXT);
             if (sharedText != null && sharedText.length() > 0 && items.size() == before) {
@@ -95,7 +87,6 @@ public class MainActivityV13 extends MainActivityV124 {
                 if (stagedText != null) items.add(Item.file(stagedText, url ? "shared-url" : "shared-text"));
             }
         }
-
         if (items.size() > before) receivedExternalShare = true;
         in.setAction(Intent.ACTION_MAIN);
         state();
@@ -111,15 +102,9 @@ public class MainActivityV13 extends MainActivityV124 {
             File dir = new File(getFilesDir(), "relay_pending");
             if (!dir.exists() && !dir.mkdirs()) return null;
             File f = new File(dir, stem + "_" + System.currentTimeMillis() + ".txt");
-            try (OutputStream out = new FileOutputStream(f)) {
-                out.write(text.getBytes(StandardCharsets.UTF_8));
-                out.flush();
-            }
+            try (OutputStream out = new FileOutputStream(f)) { out.write(text.getBytes(StandardCharsets.UTF_8)); out.flush(); }
             return f;
-        } catch (Exception e) {
-            toast("Relay could not stage the shared text.");
-            return null;
-        }
+        } catch (Exception e) { toast("Relay could not stage the shared text."); return null; }
     }
 
     @Override void chooseImport() {
@@ -132,17 +117,11 @@ public class MainActivityV13 extends MainActivityV124 {
     }
 
     String[] supportedImportMimeTypes() {
-        return new String[]{
-                "image/*", "application/pdf", "text/*",
-                "application/msword",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                "application/vnd.ms-excel",
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "application/vnd.ms-powerpoint",
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                "application/rtf", "application/json", "application/xml",
-                "text/csv", "text/plain"
-        };
+        return new String[]{"image/*","application/pdf","text/*","application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation","application/rtf",
+                "application/json","application/xml","text/csv","text/plain"};
     }
 
     @Override protected void onActivityResult(int rq, int rc, Intent d) {
@@ -153,14 +132,10 @@ public class MainActivityV13 extends MainActivityV124 {
     @Override void updateWorkflowUi() {
         super.updateWorkflowUi();
         if (incomingSummary != null) {
-            if (items.isEmpty()) {
-                incomingSummary.setVisibility(View.GONE);
-            } else {
+            if (items.isEmpty()) incomingSummary.setVisibility(View.GONE);
+            else {
                 ArrayList<String> parts = new ArrayList<>();
-                for (Item it : items) {
-                    String source = sourceLabel(it.source);
-                    parts.add(source + " · " + it.name);
-                }
+                for (Item it : items) parts.add(sourceLabel(it.source) + " · " + it.name);
                 incomingSummary.setText((receivedExternalShare ? "Received by Relay\n" : "Staged in Relay\n") + String.join("\n", parts));
                 incomingSummary.setVisibility(View.VISIBLE);
             }
@@ -184,18 +159,11 @@ public class MainActivityV13 extends MainActivityV124 {
         if (items.isEmpty()) { toast("Nothing captured yet."); return; }
         String[] rows = new String[items.size()];
         for (int i = 0; i < items.size(); i++) {
-            Item it = items.get(i);
-            String step = itemSteps.getOrDefault(it, "Capture");
-            String n = itemNotes.get(it);
+            Item it = items.get(i); String step = itemSteps.getOrDefault(it, "Capture"); String n = itemNotes.get(it);
             rows[i] = sourceLabel(it.source) + "  ·  " + step + "\n" + it.name + (n == null || n.isEmpty() ? "" : "\n" + n);
         }
-        new AlertDialog.Builder(this).setTitle("Captured items")
-                .setItems(rows, (dialog, which) -> editCapturedItem(items.get(which)))
-                .setPositiveButton("Done", null).show();
+        new AlertDialog.Builder(this).setTitle("Captured items").setItems(rows, (dialog, which) -> editCapturedItem(items.get(which))).setPositiveButton("Done", null).show();
     }
 
-    @Override void resetForNewSession() {
-        receivedExternalShare = false;
-        super.resetForNewSession();
-    }
+    @Override void resetForNewSession() { receivedExternalShare = false; super.resetForNewSession(); }
 }
