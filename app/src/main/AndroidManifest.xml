@@ -4,33 +4,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
-
     <application android:allowBackup="false" android:icon="@drawable/ic_fintrac_id" android:label="Relay Capture" android:supportsRtl="true" android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <service android:name=".ProjectionService" android:exported="false" android:foregroundServiceType="mediaProjection" />
         <activity android:name=".ScreenshotActivity" android:exported="false" android:label="Relay Screenshot" />
         <activity android:name=".CaptureActivity" android:exported="false" android:label="Relay Capture Camera" />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.relayfiles"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/relay_file_paths" />
-        </provider>
-        <activity android:name=".MainActivityV170" android:exported="true" android:launchMode="singleTop" android:label="Relay Capture">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" /><data android:mimeType="text/*" /><data android:mimeType="application/pdf" /><data android:mimeType="application/msword" /><data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><data android:mimeType="application/vnd.ms-excel" /><data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><data android:mimeType="application/vnd.ms-powerpoint" /><data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" /><data android:mimeType="application/rtf" /><data android:mimeType="application/json" /><data android:mimeType="application/xml" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" /><data android:mimeType="text/*" /><data android:mimeType="application/pdf" /><data android:mimeType="application/msword" /><data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><data android:mimeType="application/vnd.ms-excel" /><data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><data android:mimeType="application/vnd.ms-powerpoint" /><data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" /><data android:mimeType="application/rtf" /><data android:mimeType="application/json" /><data android:mimeType="application/xml" />
-            </intent-filter>
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.relayfiles" android:exported="false" android:grantUriPermissions="true"><meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/relay_file_paths" /></provider>
+        <activity android:name=".MainActivityV171" android:exported="true" android:launchMode="singleTop" android:label="Relay Capture">
+            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+            <intent-filter><action android:name="android.intent.action.SEND" /><category android:name="android.intent.category.DEFAULT" /><data android:mimeType="image/*" /><data android:mimeType="text/*" /><data android:mimeType="application/pdf" /><data android:mimeType="application/msword" /><data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><data android:mimeType="application/vnd.ms-excel" /><data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><data android:mimeType="application/vnd.ms-powerpoint" /><data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" /><data android:mimeType="application/rtf" /><data android:mimeType="application/json" /><data android:mimeType="application/xml" /></intent-filter>
+            <intent-filter><action android:name="android.intent.action.SEND_MULTIPLE" /><category android:name="android.intent.category.DEFAULT" /><data android:mimeType="image/*" /><data android:mimeType="text/*" /><data android:mimeType="application/pdf" /><data android:mimeType="application/msword" /><data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><data android:mimeType="application/vnd.ms-excel" /><data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><data android:mimeType="application/vnd.ms-powerpoint" /><data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" /><data android:mimeType="application/rtf" /><data android:mimeType="application/json" /><data android:mimeType="application/xml" /></intent-filter>
         </activity>
     </application>
 </manifest>
