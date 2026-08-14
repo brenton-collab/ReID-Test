@@ -231,8 +231,10 @@ public class MainActivityV14 extends MainActivityV13 {
                         dr.put("status", "verified");
                     } catch (Throwable e) {
                         String message = errorText(e);
-                        dr.put("status", "failed");
-                        dr.put("error", message);
+                        try {
+                            dr.put("status", "failed");
+                            dr.put("error", message);
+                        } catch (Exception ignored) {}
                         String failure = dest.label + ": " + message;
                         if (dest.required) requiredFailures.add(failure); else optionalFailures.add(failure);
                     }
@@ -255,8 +257,10 @@ public class MainActivityV14 extends MainActivityV13 {
                             sr.put("http_status", r.code);
                         } catch (Throwable e) {
                             String message = errorText(e);
-                            sr.put("status", "pending");
-                            sr.put("error", message);
+                            try {
+                                sr.put("status", "pending");
+                                sr.put("error", message);
+                            } catch (Exception ignored) {}
                             queueSignal(dest, payload, cid, message);
                             signalWarnings.add(dest.label + ": queued for retry");
                         }
