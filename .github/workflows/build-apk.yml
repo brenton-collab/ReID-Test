@@ -1,11 +1,9 @@
 name: Build Relay Capture APK
-
 on:
   push:
     branches:
       - fintrac-id-share
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,24 +15,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-
       - name: Install Android 35 SDK
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
-
       - name: Set up Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-
       - name: Build Relay APK
         shell: bash
         run: |
@@ -46,11 +39,10 @@ jobs:
             echo "Stable signing secrets not configured; building debug APK for compile testing."
             gradle :app:assembleDebug --stacktrace
           fi
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Relay-Capture-v1.7.0
+          name: Relay-Capture-v1.7.1
           path: |
             app/build/outputs/apk/release/*.apk
             app/build/outputs/apk/debug/*.apk
