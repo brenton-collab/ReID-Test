@@ -2,16 +2,42 @@ plugins {
     id("com.android.application")
 }
 
+val releaseKeystorePath = System.getenv("RELAY_KEYSTORE_PATH")
+val releaseKeystorePassword = System.getenv("RELAY_KEYSTORE_PASSWORD")
+val releaseKeyAlias = System.getenv("RELAY_KEY_ALIAS")
+val releaseKeyPassword = System.getenv("RELAY_KEY_PASSWORD")
+val hasReleaseSigning = !releaseKeystorePath.isNullOrBlank() && !releaseKeystorePassword.isNullOrBlank() && !releaseKeyAlias.isNullOrBlank() && !releaseKeyPassword.isNullOrBlank()
+
 android {
     namespace = "ca.brentzinck.fintracid"
     compileSdk = 35
+
     defaultConfig {
         applicationId = "ca.brentzinck.relaycapture"
         minSdk = 26
         targetSdk = 35
-        versionCode = 11
-        versionName = "1.0.1"
+        versionCode = 20
+        versionName = "1.1.0"
     }
+
+    if (hasReleaseSigning) {
+        signingConfigs {
+            create("relayRelease") {
+                storeFile = file(releaseKeystorePath!!)
+                storePassword = releaseKeystorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("relayRelease")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
