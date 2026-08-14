@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="false"
         android:icon="@drawable/ic_fintrac_id"
-        android:label="FINTRAC ID"
+        android:label="Relay Capture"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
@@ -12,7 +13,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:label="FINTRAC ID">
+            android:label="Relay Capture">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
