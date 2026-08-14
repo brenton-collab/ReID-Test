@@ -21,6 +21,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.activity:activity:1.10.1")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.camera:camera-core:1.4.2")
     implementation("androidx.camera:camera-camera2:1.4.2")
