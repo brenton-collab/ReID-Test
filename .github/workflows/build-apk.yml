@@ -1,4 +1,4 @@
-name: Build FINTRAC ID APK
+name: Build Relay Capture APK
 
 on:
   push:
@@ -30,12 +30,30 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build debug APK
+      - name: Restore stable release signing key
+        if: ${{ secrets.RELAY_KEYSTORE_B64 != '' }}
+        shell: bash
+        run: |
+          echo "${{ secrets.RELAY_KEYSTORE_B64 }}" | base64 --decode > "$RUNNER_TEMP/relay-release.jks"
+
+      - name: Build signed release APK
+        if: ${{ secrets.RELAY_KEYSTORE_B64 != '' }}
+        env:
+          RELAY_KEYSTORE_PATH: ${{ runner.temp }}/relay-release.jks
+          RELAY_KEYSTORE_PASSWORD: ${{ secrets.RELAY_KEYSTORE_PASSWORD }}
+          RELAY_KEY_ALIAS: ${{ secrets.RELAY_KEY_ALIAS }}
+          RELAY_KEY_PASSWORD: ${{ secrets.RELAY_KEY_PASSWORD }}
+        run: gradle :app:assembleRelease --stacktrace
+
+      - name: Build debug APK fallback
+        if: ${{ secrets.RELAY_KEYSTORE_B64 == '' }}
         run: gradle :app:assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: FINTRAC-ID-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Relay-Capture-v1.1.0
+          path: |
+            app/build/outputs/apk/release/*.apk
+            app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
