@@ -9,6 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      RELAY_KEYSTORE_B64: ${{ secrets.RELAY_KEYSTORE_B64 }}
+      RELAY_KEYSTORE_PASSWORD: ${{ secrets.RELAY_KEYSTORE_PASSWORD }}
+      RELAY_KEY_ALIAS: ${{ secrets.RELAY_KEY_ALIAS }}
+      RELAY_KEY_PASSWORD: ${{ secrets.RELAY_KEY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,24 +35,17 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Restore stable release signing key
-        if: ${{ secrets.RELAY_KEYSTORE_B64 != '' }}
+      - name: Build Relay APK
         shell: bash
         run: |
-          echo "${{ secrets.RELAY_KEYSTORE_B64 }}" | base64 --decode > "$RUNNER_TEMP/relay-release.jks"
-
-      - name: Build signed release APK
-        if: ${{ secrets.RELAY_KEYSTORE_B64 != '' }}
-        env:
-          RELAY_KEYSTORE_PATH: ${{ runner.temp }}/relay-release.jks
-          RELAY_KEYSTORE_PASSWORD: ${{ secrets.RELAY_KEYSTORE_PASSWORD }}
-          RELAY_KEY_ALIAS: ${{ secrets.RELAY_KEY_ALIAS }}
-          RELAY_KEY_PASSWORD: ${{ secrets.RELAY_KEY_PASSWORD }}
-        run: gradle :app:assembleRelease --stacktrace
-
-      - name: Build debug APK fallback
-        if: ${{ secrets.RELAY_KEYSTORE_B64 == '' }}
-        run: gradle :app:assembleDebug --stacktrace
+          if [ -n "$RELAY_KEYSTORE_B64" ]; then
+            echo "$RELAY_KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/relay-release.jks"
+            export RELAY_KEYSTORE_PATH="$RUNNER_TEMP/relay-release.jks"
+            gradle :app:assembleRelease --stacktrace
+          else
+            echo "Stable signing secrets not configured; building debug APK for compile testing."
+            gradle :app:assembleDebug --stacktrace
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
