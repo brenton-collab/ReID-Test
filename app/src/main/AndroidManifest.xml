@@ -9,7 +9,14 @@
         <service android:name=".ProjectionService" android:exported="false" android:foregroundServiceType="mediaProjection" />
         <activity android:name=".ScreenshotActivity" android:exported="false" android:label="Relay Screenshot" />
         <activity android:name=".CaptureActivity" android:exported="false" android:label="Relay Capture Camera" />
-        <activity android:name=".MainActivityV161" android:exported="true" android:launchMode="singleTop" android:label="Relay Capture">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.relayfiles"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/relay_file_paths" />
+        </provider>
+        <activity android:name=".MainActivityV170" android:exported="true" android:launchMode="singleTop" android:label="Relay Capture">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
