@@ -16,8 +16,8 @@ android {
         applicationId = "ca.brentzinck.relaycapture"
         minSdk = 26
         targetSdk = 35
-        versionCode = 40
-        versionName = "1.6.1"
+        versionCode = 41
+        versionName = "1.7.0"
     }
 
     if (hasReleaseSigning) {
@@ -46,6 +46,7 @@ android {
 
 dependencies {
     implementation("androidx.activity:activity:1.10.1")
+    implementation("androidx.core:core:1.15.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.camera:camera-core:1.4.2")
     implementation("androidx.camera:camera-camera2:1.4.2")
