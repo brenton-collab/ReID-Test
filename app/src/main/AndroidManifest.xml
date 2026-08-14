@@ -10,6 +10,11 @@
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <activity
+            android:name=".CaptureActivity"
+            android:exported="false"
+            android:label="Relay Capture Camera" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
