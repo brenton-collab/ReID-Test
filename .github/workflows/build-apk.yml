@@ -50,7 +50,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Relay-Capture-v1.1.0
+          name: Relay-Capture-v1.5.1
           path: |
             app/build/outputs/apk/release/*.apk
             app/build/outputs/apk/debug/*.apk
